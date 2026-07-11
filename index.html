@@ -57,25 +57,28 @@
         .video-wrapper { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; background: #ffe6ee; overflow: hidden; }
         video { width: 100vw; height: 100vh; object-fit: cover; background: #ffe6ee; } 
         
-        /* ✉️ كرت الرسالة (حجم ملموم وأنيق جداً) */
+       /* ✉️ كرت الرسالة (متوافق مع الأيباد والتلفون) */
         .video-message {
-            position: absolute; bottom: 4%; left: 50%; transform: translateX(-50%);
+            position: absolute; 
+            bottom: 5%; /* مسافة آمنة من الأسفل */
+            left: 50%; 
+            transform: translateX(-50%);
             background: rgba(255, 240, 245, 0.85);
             border: 1.5px solid #ff4d6d;
             color: #800020;
-            padding: 1px 15px; /* تقليل الحواف */
+            padding: 10px 20px; /* فراغ داخلي مريح للنص */
             border-radius: 15px;
-            font-size: 13px; /* تصغير الخط قليلاً */
+            font-size: 14px; 
             font-weight: 800;
             text-align: center;
             
-            /* أبعاد ذكية لمنع تغطية الفيديو */
-            width: fit-content; /* يأخذ حجم النص فقط */
+            /* أبعاد ذكية تمنع تغطية الفيديو */
+            width: fit-content; 
             min-width: 250px;
-            max-width: 75%; /* لا يتجاوز 75% من عرض الشاشة */
-            max-height: 200vh; /* الحد الأقصى للطول هو 20% فقط من ارتفاع الشاشة */
+            max-width: 85%; /* مناسب للأيباد */
+            max-height: 25vh; /* 👈 هنا صلحنا الخطأ: أقصى ارتفاع 25% من الشاشة فقط */
             
-            overflow-y: auto;
+            overflow-y: auto; /* تشغيل السكرول إذا طالت الرسالة */
             white-space: pre-wrap;
             backdrop-filter: blur(8px);
             box-shadow: 0 5px 20px rgba(216, 27, 96, 0.3);
@@ -83,7 +86,6 @@
             transition: opacity 1.2s ease-in-out;
         }
         .video-message.show { opacity: 1; pointer-events: auto; }
-
         /* تجميل شريط التمرير */
         .video-message::-webkit-scrollbar { width: 5px; }
         .video-message::-webkit-scrollbar-track { background: transparent; }
