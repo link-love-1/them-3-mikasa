@@ -57,36 +57,37 @@
         .video-wrapper { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; background: #ffe6ee; overflow: hidden; }
         video { width: 100vw; height: 100vh; object-fit: cover; background: #ffe6ee; } 
         
-        /* ✉️ كرت الرسالة (مضغوط على قد الكلمات بالضبط) */
+        /* ✉️ كرت الرسالة المطور والمحمي من الاختفاء في الآيباد */
         .video-message {
             position: absolute; 
             bottom: 5%; 
             left: 50%; 
             transform: translateX(-50%);
-            background: rgba(255, 240, 245, 0.85);
-            border: 1.5px solid #ff4d6d;
+            background: rgba(255, 240, 245, 0.88);
+            border: 2px solid #ff4d6d;
             color: #800020;
-            padding: 6px 14px; /* فراغ داخلي قليل جداً */
-            border-radius: 12px; /* استدارة أنعم */
+            padding: 8px 18px;
+            border-radius: 15px;
             font-size: 14px; 
             font-weight: 800;
             text-align: center;
             
-            /* السر هنا: عرض على قد الكلمات بالضبط بدون إجبار */
-            width: fit-content; 
-            min-width: auto; /* إلغاء العرض الإجباري */
-            max-width: 85%; 
-            max-height: 25vh; 
+            /* 🛠️ حل مشكلة الآيباد: عرض مرن بنسبة مئوية لمنع الانهيار والاختفاء */
+            width: 85%; 
+            max-width: 450px; 
+            max-height: 22vh; /* ربع ارتفاع الشاشة كحد أقصى للحفاظ على مساحة الفيديو */
             
             overflow-y: auto; 
             white-space: pre-wrap; 
             backdrop-filter: blur(8px);
-            box-shadow: 0 5px 20px rgba(216, 27, 96, 0.3);
+            box-shadow: 0 8px 25px rgba(216, 27, 96, 0.35);
             opacity: 0;
             transition: opacity 1.2s ease-in-out;
+            z-index: 999; /* لضمان البقاء فوق الفيديو دائماً */
         }
         .video-message.show { opacity: 1; pointer-events: auto; }
 
+        /* تخصيص السكرول بار */
         .video-message::-webkit-scrollbar { width: 5px; }
         .video-message::-webkit-scrollbar-track { background: transparent; }
         .video-message::-webkit-scrollbar-thumb { background: #ff4d6d; border-radius: 10px; }
@@ -130,12 +131,12 @@
         
         const db_recipient = urlParams.get('recipient') || "نور";
         const db_sender = urlParams.get('sender') || "علي";
-        const raw_message = urlParams.get('message') || "أتمنى تعجبج هاي المفاجأة البسيطة، كل عام وانتي بألف خير ويا رب تحقيق الأماني.";
+        const raw_message = urlParams.get('message') || "أتمنى تعجبج هاي المفاجأة البسيطة، كل عام وانتي بألف خير ويا رب تحقيق الأماني المرجوة.";
         
-        // تنسيق الرسالة بسطر واحد لمنع طباعة أي مسافات فارغة وهمية
-        const formatted_message = `<div style="font-size: 11px; color: #d81b60; margin-bottom: 4px; border-bottom: 1px dashed #ff4d6d; padding-bottom: 4px;">إهداء من: <strong style="font-size: 13px;">${db_sender}</strong></div><div style="line-height: 1.4;">${raw_message.replace(/\n/g, '<br>')}</div>`;
+        // بناء الرسالة في سطر واحد مضغوط بدون مسافات فارغة وهمية
+        const formatted_message = `<div style="font-size: 11px; color: #d81b60; margin-bottom: 4px; border-bottom: 1px dashed #ff4d6d; padding-bottom: 4px;">إهداء من: <strong style="font-size: 13px;">${db_sender}</strong></div><div style="line-height: 1.5;">${raw_message.replace(/\n/g, '<br>')}</div>`;
         
-        // رابط الأغنية المباشر للتجربة المحلية
+        // الأغنية الافتراضية
         const rawAudioUrl = "https://www.youtube.com/watch?v=wPTJNXTEM_4"; 
         const startTime = 40; 
 
