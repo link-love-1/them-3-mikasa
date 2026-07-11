@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مفاجأة خاصة ✨</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+        
+        body { background-color: #fff0f5; color: #800020; width: 100vw; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; position: relative; }
+
+        /* 🖼️ الطبقة الأولى: الصور */
+        .bg-mikasa { position: fixed; top: 6vh; left: 4vw; width: 45vw; max-width: 250px; transform: rotate(-10deg); z-index: 1; opacity: 0.95; border-radius: 15px; box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5); }
+        .bg-eren { position: fixed; bottom: 6vh; right: 4vw; width: 45vw; max-width: 250px; transform: rotate(10deg); z-index: 1; opacity: 0.95; border-radius: 15px; box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5); }
+        .bg-center { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85vw; max-width: 450px; z-index: 1; opacity: 0.9; border-radius: 20px; box-shadow: 0 12px 35px rgba(255, 20, 147, 0.4); }
+
+        /* 🌸 الطبقة الثانية: الغشاء الوردي */
+        .pink-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 192, 203, 0.5); backdrop-filter: blur(5px); z-index: 2; }
+
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s ease, transform 0.6s ease; z-index: 10; background: transparent; }
+        .hidden { opacity: 0; pointer-events: none; transform: scale(0.95); z-index: -1; }
+
+        /* 💖 شاشة البداية */
+        #introScreen { z-index: 20; }
+        .intro-title { font-size: 28px; font-weight: 900; margin-bottom: 35px; text-align: center; color: #d81b60; text-shadow: 2px 2px 0px #ffffff, 0 0 15px rgba(255, 255, 255, 0.8); }
+        
+        .heart-circle-container {
+            width: 120px; height: 120px;
+            background: radial-gradient(circle, #ff1493 0%, #c71585 100%);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 20, 147, 0.6), inset 0 0 15px rgba(255,255,255,0.4);
+            animation: pulseCircle 1.4s infinite ease-in-out;
+            border: 3px solid #ffffff;
+        }
+        .heart-icon { font-size: 50px; animation: pulseHeart 1.4s infinite ease-in-out; filter: drop-shadow(0 2px 4px rgba(128,0,32,0.4)); }
+        .intro-subtitle { margin-top: 25px; font-size: 15px; color: #c2185b; font-weight: bold; text-align: center; max-width: 80%; background: rgba(255,255,255,0.7); padding: 8px 15px; border-radius: 20px; border: 1px dashed #ff69b4; }
+
+        @keyframes pulseCircle {
+            0% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 20, 147, 0.6); }
+            50% { transform: scale(1.08); box-shadow: 0 0 45px rgba(255, 105, 180, 0.9); }
+            100% { transform: scale(1); box-shadow: 0 0 25px rgba(255, 20, 147, 0.6); }
+        }
+        @keyframes pulseHeart {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* 📱 شاشة تدوير الهاتف */
+        .rotate-box { background: rgba(255, 240, 245, 0.95); border: 2px solid #ff4d6d; padding: 35px; border-radius: 25px; text-align: center; max-width: 85%; box-shadow: 0 15px 35px rgba(216, 27, 96, 0.3); backdrop-filter: blur(10px); }
+        .rotate-title { font-size: 22px; color: #d81b60; margin-bottom: 12px; font-weight: 900; }
+        .rotate-desc { font-size: 15px; color: #ad1457; line-height: 1.6; font-weight: bold; }
+
+        /* 🎬 شاشة العرض السينمائي (الفيديو) */
+        .video-wrapper { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; background: #ffe6ee; overflow: hidden; }
+        video { width: 100vw; height: 100vh; object-fit: cover; background: #ffe6ee; } 
+        
+        /* ✉️ كرت الرسالة (حجم ملموم وأنيق جداً) */
+        .video-message {
+            position: absolute; bottom: 4%; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 240, 245, 0.85);
+            border: 1.5px solid #ff4d6d;
+            color: #800020;
+            padding: 1px 15px; /* تقليل الحواف */
+            border-radius: 15px;
+            font-size: 13px; /* تصغير الخط قليلاً */
+            font-weight: 800;
+            text-align: center;
+            
+            /* أبعاد ذكية لمنع تغطية الفيديو */
+            width: fit-content; /* يأخذ حجم النص فقط */
+            min-width: 250px;
+            max-width: 75%; /* لا يتجاوز 75% من عرض الشاشة */
+            max-height: 200vh; /* الحد الأقصى للطول هو 20% فقط من ارتفاع الشاشة */
+            
+            overflow-y: auto;
+            white-space: pre-wrap;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 5px 20px rgba(216, 27, 96, 0.3);
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+        .video-message.show { opacity: 1; pointer-events: auto; }
+
+        /* تجميل شريط التمرير */
+        .video-message::-webkit-scrollbar { width: 5px; }
+        .video-message::-webkit-scrollbar-track { background: transparent; }
+        .video-message::-webkit-scrollbar-thumb { background: #ff4d6d; border-radius: 10px; }
+
+    </style>
+</head>
+<body>
+
+    <img src="mikasa.png" class="bg-mikasa" alt="Mikasa">
+    <img src="eren-mikasa1.png" class="bg-center" alt="Eren and Mikasa">
+    <img src="eren.png" class="bg-eren" alt="Eren">
+
+    <div class="pink-overlay"></div>
+
+    <div id="introScreen" class="screen">
+        <h1 class="intro-title">هل انتِ <span id="dyn-recipient">...</span> لو لا ؟ 🫣</h1>
+        <div class="heart-circle-container" id="startBtn">
+            <div class="heart-icon">🩷</div>
+        </div>
+        <p class="intro-subtitle">دوسي عالقلب حتى تكملين المفاجأة😍😉</p>
+    </div>
+
+    <div id="rotateScreen" class="screen hidden">
+        <div class="rotate-box">
+            <h2 class="rotate-title">من فضلكِ، دوري الهاتف 🔄</h2>
+            <p class="rotate-desc">حتى تشوفين المفاجأة أحلى😍👌</p>
+        </div>
+    </div>
+
+    <div id="videoScreen" class="screen hidden">
+        <div class="video-wrapper">
+            <video id="mainVideo" src="them-video-3.mp4" playsinline preload="auto" loop muted></video>
+        </div>
+        <div id="dyn-message" class="video-message"></div>
+    </div>
+
+    <div id="yt-audio-player" style="position:fixed; width:1px; height:1px; opacity:0.001; pointer-events:none;"></div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const db_recipient = urlParams.get('recipient') || "نور";
+        const db_sender = urlParams.get('sender') || "علي";
+        
+        const raw_message = urlParams.get('message') || "أتمنى تعجبج هاي المفاجأة البسيطة، كل عام وانتي بألف خير ويا رب تحقيق الأماني.";
+        
+        // تنسيق الرسالة ليكون بحجم متناسق وملموم
+        const formatted_message = `
+<div style="font-size: 11px; color: #d81b60; margin-bottom: 5px; border-bottom: 1px dashed #ff4d6d; padding-bottom: 4px;">
+    إهداء من: <strong style="font-size: 13px;">${db_sender}</strong>
+</div>
+<div style="line-height: 1.5;">
+    ${raw_message.replace(/\n/g, '<br>')}
+</div>
+        `;
+        
+        const rawAudioUrl = urlParams.get('yt') || "https://youtu.be/XlCGvtutCpw?si=Pi9CSYKgJONmoCvK"; 
+        const startTime = parseInt(urlParams.get('start') || "180", 10);
+
+        document.getElementById('dyn-recipient').innerText = db_recipient;
+        document.getElementById('dyn-message').innerHTML = formatted_message;
+
+        const introScreen = document.getElementById('introScreen');
+        const rotateScreen = document.getElementById('rotateScreen');
+        const videoScreen = document.getElementById('videoScreen');
+        const video = document.getElementById('mainVideo');
+        const messageOverlay = document.getElementById('dyn-message');
+
+        let userInteracted = false;
+
+        const hasExternalAudio = rawAudioUrl.trim().length > 0;
+        const isMp3File = rawAudioUrl.toLowerCase().includes('.mp3') || rawAudioUrl.includes('supabase.co/storage');
+
+        let ytPlayer = null;
+        let localAudio = null;
+        let isAudioLoaded = false;
+
+        if (hasExternalAudio) {
+            if (isMp3File) {
+                localAudio = document.createElement('audio');
+                localAudio.src = rawAudioUrl;
+                localAudio.preload = 'auto';
+                localAudio.loop = true;
+                document.body.appendChild(localAudio);
+                isAudioLoaded = true;
+            } else {
+                function getYoutubeId(url) {
+                    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                    const match = url.match(regExp);
+                    return (match && match[2].length === 11) ? match[2] : 'dQw4w9WgXcQ';
+                }
+
+                const tag = document.createElement('script');
+                tag.src = "https://www.youtube.com/iframe_api";
+                document.head.appendChild(tag);
+
+                window.onYouTubeIframeAPIReady = function() {
+                    ytPlayer = new YT.Player('yt-audio-player', {
+                        videoId: getYoutubeId(rawAudioUrl),
+                        playerVars: { 'autoplay': 0, 'controls': 0, 'start': startTime, 'playsinline': 1 },
+                        events: {
+                            'onReady': () => { isAudioLoaded = true; },
+                            'onStateChange': (e) => { if(e.data === 0) { ytPlayer.seekTo(startTime); ytPlayer.playVideo(); } }
+                        }
+                    });
+                }
+            }
+        }
+
+        function checkOrientation() {
+            if (!userInteracted) return;
+
+            const isLandscape = window.innerWidth > window.innerHeight;
+
+            if (isLandscape) {
+                rotateScreen.classList.add('hidden');
+                videoScreen.classList.remove('hidden');
+                
+                video.play().catch(e => console.log("Video fail:", e));
+
+                if (hasExternalAudio && isAudioLoaded) {
+                    if (isMp3File && localAudio) {
+                        localAudio.currentTime = startTime;
+                        localAudio.play().catch(e => console.log(e));
+                    } else if (!isMp3File && ytPlayer) {
+                        ytPlayer.unMute();
+                        ytPlayer.setVolume(100);
+                        ytPlayer.seekTo(startTime);
+                        ytPlayer.playVideo();
+                    }
+                }
+                
+                setTimeout(() => { messageOverlay.classList.add('show'); }, 1500);
+            } else {
+                rotateScreen.classList.remove('hidden');
+                videoScreen.classList.add('hidden');
+                video.pause();
+                if (hasExternalAudio) {
+                    if (isMp3File && localAudio) localAudio.pause();
+                    else if (!isMp3File && ytPlayer) ytPlayer.pauseVideo();
+                }
+                messageOverlay.classList.remove('show');
+            }
+        }
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            userInteracted = true;
+            introScreen.classList.add('hidden');
+            
+            video.play().then(() => {
+                video.pause();
+                checkOrientation();
+            }).catch(() => {
+                checkOrientation();
+            });
+        });
+
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+    </script>
+</body>
+</html>
