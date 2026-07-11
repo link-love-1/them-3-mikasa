@@ -57,40 +57,45 @@
         .video-wrapper { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; background: #ffe6ee; overflow: hidden; }
         video { width: 100vw; height: 100vh; object-fit: cover; background: #ffe6ee; } 
         
-        /* ✉️ كرت الرسالة المطور والمحمي من الاختفاء في الآيباد */
-        .video-message {
-            position: absolute; 
-            bottom: 5%; 
-            left: 50%; 
-            transform: translateX(-50%);
-            background: rgba(255, 240, 245, 0.88);
-            border: 2px solid #ff4d6d;
-            color: #800020;
-            padding: 8px 18px;
-            border-radius: 15px;
-            font-size: 14px; 
-            font-weight: 800;
-            text-align: center;
-            
-            /* 🛠️ حل مشكلة الآيباد: عرض مرن بنسبة مئوية لمنع الانهيار والاختفاء */
-            width: 85%; 
-            max-width: 450px; 
-            max-height: 22vh; /* ربع ارتفاع الشاشة كحد أقصى للحفاظ على مساحة الفيديو */
-            
-            overflow-y: auto; 
-            white-space: pre-wrap; 
+        /* ✉️ الشريط المتحرك العلوي (فكرة عبقرية) */
+        .ticker-wrap {
+            position: absolute;
+            top: 0; /* مكانه بأعلى الشاشة */
+            left: 0;
+            width: 100vw;
+            height: 45px;
+            background: rgba(255, 240, 245, 0.85);
+            border-bottom: 2px solid #ff4d6d;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
             backdrop-filter: blur(8px);
-            box-shadow: 0 8px 25px rgba(216, 27, 96, 0.35);
+            box-shadow: 0 4px 15px rgba(216, 27, 96, 0.3);
+            z-index: 999;
             opacity: 0;
-            transition: opacity 1.2s ease-in-out;
-            z-index: 999; /* لضمان البقاء فوق الفيديو دائماً */
+            transform: translateY(-100%); /* يبدأ مسحوب للأعلى */
+            transition: opacity 1.2s ease-in-out, transform 1s ease-in-out;
         }
-        .video-message.show { opacity: 1; pointer-events: auto; }
+        
+        .ticker-wrap.show {
+            opacity: 1;
+            transform: translateY(0); /* ينزل بهدوء */
+        }
 
-        /* تخصيص السكرول بار */
-        .video-message::-webkit-scrollbar { width: 5px; }
-        .video-message::-webkit-scrollbar-track { background: transparent; }
-        .video-message::-webkit-scrollbar-thumb { background: #ff4d6d; border-radius: 10px; }
+        .ticker-move {
+            display: inline-block;
+            white-space: nowrap;
+            font-size: 16px;
+            font-weight: 800;
+            color: #800020;
+            /* أنيميشن الحركة المستمرة (المدة 25 ثانية حتى يكون بطيء ومقروء) */
+            animation: ticker-animation 25s linear infinite; 
+        }
+
+        @keyframes ticker-animation {
+            0% { transform: translateX(-100vw); } /* يبدأ من يسار الشاشة ليظهر من البداية */
+            100% { transform: translateX(100%); } /* يختفي يميناً */
+        }
 
     </style>
 </head>
@@ -121,7 +126,10 @@
         <div class="video-wrapper">
             <video id="mainVideo" src="them-video-3.mp4" playsinline preload="auto" loop muted></video>
         </div>
-        <div id="dyn-message" class="video-message"></div>
+        
+        <div class="ticker-wrap" id="ticker-container">
+            <div class="ticker-move" id="dyn-message"></div>
+        </div>
     </div>
 
     <div id="yt-audio-player" style="position:fixed; width:1px; height:1px; opacity:0.001; pointer-events:none;"></div>
@@ -131,13 +139,16 @@
         
         const db_recipient = urlParams.get('recipient') || "نور";
         const db_sender = urlParams.get('sender') || "علي";
-        const raw_message = urlParams.get('message') || "أتمنى تعجبج هاي المفاجأة البسيطة، كل عام وانتي بألف خير ويا رب تحقيق الأماني المرجوة.";
         
-        // بناء الرسالة في سطر واحد مضغوط بدون مسافات فارغة وهمية
-        const formatted_message = `<div style="font-size: 11px; color: #d81b60; margin-bottom: 4px; border-bottom: 1px dashed #ff4d6d; padding-bottom: 4px;">إهداء من: <strong style="font-size: 13px;">${db_sender}</strong></div><div style="line-height: 1.5;">${raw_message.replace(/\n/g, '<br>')}</div>`;
+        // جلبنا الرسالة الأصلية
+        let raw_message = urlParams.get('message') || "أتمنى تعجبج هاي المفاجأة البسيطة، كل عام وانتي بألف خير ويا رب تحقيق الأماني .";
+        // إزالة النزولات بالأشطر حتى تصير سطر واحد مستمر للشريط
+        raw_message = raw_message.replace(/\n/g, ' 🩷 ');
         
-        // الأغنية الافتراضية
-        const rawAudioUrl = "https://www.youtube.com/watch?v=wPTJNXTEM_4"; 
+        // دمج اسم المهدي مع الرسالة بشكل أنيق بسطر واحد
+        const formatted_message = `🎁 إهداء من: ${db_sender} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ✨ ${raw_message}`;
+        
+        const rawAudioUrl = "https://youtu.be/XlCGvtutCpw?si=H0ur4YCeJi91bly1"; 
         const startTime = 40; 
 
         document.getElementById('dyn-recipient').innerText = db_recipient;
@@ -147,7 +158,7 @@
         const rotateScreen = document.getElementById('rotateScreen');
         const videoScreen = document.getElementById('videoScreen');
         const video = document.getElementById('mainVideo');
-        const messageOverlay = document.getElementById('dyn-message');
+        const tickerContainer = document.getElementById('ticker-container');
 
         let userInteracted = false;
 
@@ -213,7 +224,8 @@
                     }
                 }
                 
-                setTimeout(() => { messageOverlay.classList.add('show'); }, 1500);
+                // إظهار الشريط المتحرك بعد ثانية ونص
+                setTimeout(() => { tickerContainer.classList.add('show'); }, 1500);
             } else {
                 rotateScreen.classList.remove('hidden');
                 videoScreen.classList.add('hidden');
@@ -222,7 +234,7 @@
                     if (isMp3File && localAudio) localAudio.pause();
                     else if (!isMp3File && ytPlayer) ytPlayer.pauseVideo();
                 }
-                messageOverlay.classList.remove('show');
+                tickerContainer.classList.remove('show');
             }
         }
 
